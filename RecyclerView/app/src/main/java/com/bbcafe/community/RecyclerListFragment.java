@@ -3,6 +3,8 @@ package com.bbcafe.community;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bbcafe.community.network.ServerRequest;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,25 +58,30 @@ public class RecyclerListFragment extends Fragment {
     @SuppressWarnings("unchecked")
     private void sendServerRequest() {
         if (ServerRequest.isConnectedToInternet(getContext())) {
-            ServerRequest.post("http://commune.bestbloggercafe.com/utilities/view_all_resources", new ServerRequest.GetResult() {
+            final ProgressDialog progressDialog = new ProgressDialog();
+            progressDialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager());
+            ServerRequest.get("http://192.168.43.182/commune/utilities/view_all_resources", new ServerRequest.GetResult() {
                 @Override
                 public void onResult(String resultStringFromServer) {
+                    progressDialog.cancel();
                     try {
                         if (!resultStringFromServer.isEmpty()) {
                             JSONObject jsonObject = new JSONObject(resultStringFromServer);//get your result json object here
-                            Log.i("Server Rsult",resultStringFromServer);
+                            Log.i(TAG,resultStringFromServer);
+                            if (jsonObject.getInt("status")==1) {
+                                recyclerView.setAdapter(new RecyclerAdapter(jsonObject.getJSONArray("items")));
+                            } else {
+                                Toast.makeText(getContext(), "Status: "+jsonObject.getInt("status"), Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_SHORT).show();
                         }
-
-                        recyclerView.setAdapter(new RecyclerAdapter(getJsonObject().getJSONArray("RESULT_ARRAY")));
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
-            }, new Pair<>("PARAM_KEY", "PARAM_VALUE"), new Pair<>("PARAM_KEY", "PARAM_VALUE"));//use comma to add more params
+            });
         }
     }
 
@@ -87,10 +95,6 @@ public class RecyclerListFragment extends Fragment {
         super.onDetach();
     }
 
-    private JSONObject getJsonObject() throws JSONException {
-        return new JSONObject("{\"RESULT_ARRAY\":[{\"text\":\"ListItem Google\", \"url\":\"http://www.google.co.in/\"},{\"text\":\"ListItem Amazon\", \"url\":\"http://www.amazon.in/\"},{\"text\":\"ListItem Flipkart\", \"url\":\"http://www.flipkart.com/\"},{\"text\":\"ListItem Yahoo\", \"url\":\"http://www.yahoo.in/\"},{\"text\":\"ListItem Sankar Prakash\", \"url\":\"https://www.facebook.com/sankarprakash.yadav?ref=br_rs\"}]}");
-    }
-
     private class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
         private JSONArray jsonArray;
@@ -102,12 +106,18 @@ public class RecyclerListFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder{
             private View itemContainer;
 
-            private final AppCompatTextView listText;
+            private final AppCompatTextView title;
+            //private final AppCompatTextView title, url, published, id;
+            private final AppCompatImageView image;
 
             ViewHolder(View v) {
                 super(v);
                 itemContainer = v;
-                listText = (AppCompatTextView) v.findViewById(R.id.listText);
+                title = v.findViewById(R.id.title);
+                //url = v.findViewById(R.id.url);
+                //published = v.findViewById(R.id.published);
+                //id = v.findViewById(R.id.id);
+                image = v.findViewById(R.id.imageView);
             }
         }
         @Override
@@ -125,8 +135,13 @@ public class RecyclerListFragment extends Fragment {
             try {
                 final JSONObject jsonObject = jsonArray.getJSONObject(holder.getAdapterPosition());
 
-                holder.listText.setText(jsonObject.getString("text"));
-
+                holder.title.setText(jsonObject.getString("title"));
+                //holder.url.setText(jsonObject.getString("url"));
+                //holder.published.setText(jsonObject.getString("published"));
+                //holder.id.setText(jsonObject.getString("id"));
+                Picasso.with(getContext()).load(jsonObject.getString("image")).into(holder.image);
+                /*Log.i("Image",jsonObject.getString("image"));
+                Log.i("Url",jsonObject.getString("url"));*/
                 holder.itemContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

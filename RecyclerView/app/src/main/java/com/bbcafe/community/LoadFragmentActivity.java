@@ -13,7 +13,7 @@ import android.view.View;
 
 public class LoadFragmentActivity extends AppCompatActivity {
 
-    private static final String URL_TO_LOAD = "http://commune.bestbloggercafe.com/utilities/view_all_resources";
+    private static final String URL_TO_LOAD = "URL_TO_LOAD";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

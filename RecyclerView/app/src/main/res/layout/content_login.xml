@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#455A64"
+    android:background="#f0f0f0"
     android:orientation="vertical"
     android:weightSum="4"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -20,22 +20,11 @@
 
         <ImageView
             android:id="@+id/google_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="100dp"
-            android:src="@drawable/googleg_color" />
-
-        <TextView
-            android:id="@+id/title_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Google Sign-In Quickstart"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="36sp" />
-
+            android:layout_marginTop="10dp"
+            android:src="@drawable/launchscreen" />
         <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
@@ -43,19 +32,6 @@
             android:text="Signed out"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fadeScrollbars="true"
-            android:gravity="center"
-            android:maxLines="5"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-
         <Button
             android:id="@+id/button_optional_action"
             style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"

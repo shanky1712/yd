@@ -3,10 +3,15 @@ package com.bbcafe.community.network;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 
 
@@ -35,6 +40,30 @@ public class ServerRequest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void get(String url, GetResult getResult, Pair<String, String>... params) {
+        try {
+            Log.i("URL_DATA",url);
+            StringBuilder getData = new StringBuilder(url);
+            getData.append("?");
+            for (int i=0; i<params.length; i++) {
+                getData.append(URLEncoder.encode(params[i].first, "UTF-8"));
+                getData.append("=");
+                getData.append(URLEncoder.encode(params[i].second, "UTF-8"));
+                if (i!=(params.length-1)) {
+                    getData.append("&");
+                }
+            }
+            new GetAsyncTask(getResult).execute(getData.toString());
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void get(String url, GetResult getResult) {
+        new GetAsyncTask(getResult).execute(url);
     }
 
     public static boolean isConnectedToInternet(Context context) {

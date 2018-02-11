@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">வாழ்க யாதவம் !</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,7 +8,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_load_fragment">WebViewActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_activity_load_fragment">வளர்க யாதவ புகழ்!</string>
+    <string name="title_activity_login">Yadhavaa</string>
+    <string name="title_activity_details">தொடர்புகள்</string>
 </resources>

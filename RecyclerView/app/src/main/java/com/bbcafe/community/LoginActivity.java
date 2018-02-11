@@ -1,17 +1,18 @@
 package com.bbcafe.community;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bbcafe.community.network.ServerRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -20,7 +21,12 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+@SuppressWarnings("unchecked")
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 9001;
@@ -29,11 +35,14 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        context = this;
         // Views
         mStatusTextView = findViewById(R.id.status);
 
@@ -165,12 +174,62 @@ public class LoginActivity extends AppCompatActivity {
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-            MainActivity.start(this, account);
+            sendToServer(account);
         } else {
             mStatusTextView.setText("Signed out");
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+        }
+    }
+
+    private void sendToServer(@NonNull final GoogleSignInAccount account) {
+        if (ServerRequest.isConnectedToInternet(context)) {
+            final ProgressDialog progressDialog = new ProgressDialog();
+            progressDialog.show(getSupportFragmentManager());
+            ServerRequest.get("http://192.168.43.182/commune/utilities/assign_work", new ServerRequest.GetResult() {
+                @Override
+                public void onResult(String resultStringFromServer) {
+                    progressDialog.cancel();
+                    try {
+                        if (!resultStringFromServer.isEmpty()) {
+                            JSONObject jsonObject = new JSONObject(resultStringFromServer);//get your result json object here
+                            Log.i(TAG,resultStringFromServer);
+                            if (jsonObject.getInt("status")==1) {
+                                MainActivity.start(LoginActivity.this, account);
+                            } else {
+                                signOut();
+                                Toast.makeText(context, "Invalid User Data", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "Connection Error", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }, new Pair<>("name", account.getDisplayName()),
+                    new Pair<>("photo", ""+account.getPhotoUrl()),
+                    new Pair<>("email", account.getEmail()),
+                    new Pair<>("mobile", "NOT_AVAILABLE"),
+                    new Pair<>("appver", BuildConfig.VERSION_NAME),
+                    new Pair<>("joinedon", "PARAM_VALUE"),
+                    new Pair<>("lastactivity", "PARAM_VALUE"),
+                    new Pair<>("dob", "PARAM_VALUE"),
+                    new Pair<>("sex", "PARAM_VALUE"),
+                    new Pair<>("aboutme", "PARAM_VALUE"),
+                    new Pair<>("devicetoken", FirebaseInstanceId.getInstance().getToken()),
+                    new Pair<>("googleid", account.getId()),
+                    new Pair<>("blood", "PARAM_VALUE"),
+                    new Pair<>("addr1", "PARAM_VALUE"),
+                    new Pair<>("addr2", "PARAM_VALUE"),
+                    new Pair<>("city", "PARAM_VALUE"),
+                    new Pair<>("state", "PARAM_VALUE"),
+                    new Pair<>("pincode", "PARAM_VALUE"));
+        } else {
+            signOut();
         }
     }
 }

@@ -3,9 +3,12 @@ package com.bbcafe.community;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bbcafe.community.network.ServerRequest;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,24 +58,31 @@ public class RecyclerListFragment2 extends Fragment {
     @SuppressWarnings("unchecked")
     private void sendServerRequest() {
         if (ServerRequest.isConnectedToInternet(getContext())) {
-            ServerRequest.post("ENTER_URL_HERE", new ServerRequest.GetResult() {
+            final ProgressDialog progressDialog = new ProgressDialog();
+            progressDialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager());
+            ServerRequest.get("http://192.168.43.182/commune/utilities/view_all_contracts", new ServerRequest.GetResult() {
                 @Override
                 public void onResult(String resultStringFromServer) {
+                    progressDialog.cancel();
                     try {
                         if (!resultStringFromServer.isEmpty()) {
                             JSONObject jsonObject = new JSONObject(resultStringFromServer);//get your result json object here
+                            Log.i(TAG,resultStringFromServer);
+                            recyclerView.setAdapter(new RecyclerAdapter(jsonObject.getJSONArray("utilities")));
+                            /*if (jsonObject.getInt("status")==1) {
+                                recyclerView.setAdapter(new RecyclerAdapter(jsonObject.getJSONArray("utilities")));
+                            } else {
+                                Toast.makeText(getContext(), "Status: "+jsonObject.getInt("status"), Toast.LENGTH_SHORT).show();
+                            }*/
                         } else {
                             Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_SHORT).show();
                         }
-
-                        recyclerView.setAdapter(new RecyclerAdapter(getJsonObject().getJSONArray("RESULT_ARRAY")));
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
-            }, new Pair<>("PARAM_KEY", "PARAM_VALUE"), new Pair<>("PARAM_KEY", "PARAM_VALUE"));//use comma to add more params
+            });
         }
     }
 
@@ -84,11 +95,6 @@ public class RecyclerListFragment2 extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-    private JSONObject getJsonObject() throws JSONException {
-        return new JSONObject("{\"RESULT_ARRAY\":[{\"text\":\"ListItem Google\", \"url\":\"http://www.google.co.in/\"},{\"text\":\"ListItem Amazon\", \"url\":\"http://www.amazon.in/\"},{\"text\":\"ListItem Flipkart\", \"url\":\"http://www.flipkart.com/\"},{\"text\":\"ListItem Yahoo\", \"url\":\"http://www.yahoo.in/\"},{\"text\":\"ListItem Sankar Prakash\", \"url\":\"https://www.facebook.com/sankarprakash.yadav?ref=br_rs\"}]}");
-    }
-
 
 
 
@@ -103,12 +109,17 @@ public class RecyclerListFragment2 extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder{
             private View itemContainer;
 
-            private final AppCompatTextView listText;
+            private final AppCompatTextView name, shopName, mobile;
+            private final AppCompatImageView image;
 
             ViewHolder(View v) {
                 super(v);
                 itemContainer = v;
-                listText = (AppCompatTextView) v.findViewById(R.id.listText);
+                name = v.findViewById(R.id.name);
+                shopName = v.findViewById(R.id.shopName);
+                mobile = v.findViewById(R.id.mobile);
+                /*landLine = v.findViewById(R.id.landLine);*/
+                image = v.findViewById(R.id.imageView);
             }
         }
         @Override
@@ -126,16 +137,16 @@ public class RecyclerListFragment2 extends Fragment {
             try {
                 final JSONObject jsonObject = jsonArray.getJSONObject(holder.getAdapterPosition());
 
-                holder.listText.setText(jsonObject.getString("text"));
+                holder.name.setText(jsonObject.getString("name"));
+                holder.shopName.setText(jsonObject.getString("shopname"));
+                holder.mobile.setText(jsonObject.getString("mobile"));
+                /*holder.landLine.setText(jsonObject.getString("landline"));*/
+                Picasso.with(getContext()).load(jsonObject.getString("photo")).into(holder.image);
 
                 holder.itemContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
-                            DetailsActivity.start(getActivity(), jsonObject.getString("text"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        DetailsActivity.start(getActivity(), jsonObject.toString());
                     }
                 });
             } catch (JSONException e) {

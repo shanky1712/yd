@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     private ImageView ivUserPhoto;
     private TextView tvUserName, tvUserEmail;
-
+    //private ShareActionProvider mShareActionProvider;
 
     //private FrameLayout fragmentContainer;
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -121,9 +122,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        // Locate MenuItem with ShareActionProvider
+        //MenuItem item = menu.findItem(R.id.nav_share);
+
+        // Fetch and store ShareActionProvider
+        //mShareActionProvider = (ShareActionProvider) item.getActionProvider();
         return true;
     }
-
+    // Call to update the share intent
+   /* private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -157,7 +168,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             createTextFragment("nav_manage");
         } else if (id == R.id.nav_share) {
-            createTextFragment("nav_share");
+            //createTextFragment("nav_share");
+            shareIt();
         } else if (id == R.id.nav_send) {
             createTextFragment("nav_send");
         }
@@ -166,7 +178,14 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    private void shareIt() {
+//sharing implementation here
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "யாதவ சொந்தங்களே !!");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "யாதவ சமுதாய செய்திகளையும் , ஒவ்வொரு யாதவ சமுதாயத்தை சேர்ந்தவரும் இந்த வலைத்தளத்தினை பயன்படுத்தி கொள்ளவும் visit http://yadhavaa.blogspot.in/");
+        startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));
+    }
     void createRecyclerListFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

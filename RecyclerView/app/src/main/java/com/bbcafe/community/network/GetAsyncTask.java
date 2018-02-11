@@ -2,11 +2,6 @@ package com.bbcafe.community.network;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.Pair;
-
-import com.bbcafe.community.LoginActivity;
-
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,12 +18,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 
-public class PostAsyncTask extends AsyncTask<String, Void, String> {
-    private static final String TAG = PostAsyncTask.class.getSimpleName();
+public class GetAsyncTask extends AsyncTask<String, Void, String> {
+    private static final String TAG = GetAsyncTask.class.getSimpleName();
 
     ServerRequest.GetResult getResult;
 
-    PostAsyncTask(ServerRequest.GetResult getResult) {
+    GetAsyncTask(ServerRequest.GetResult getResult) {
         this.getResult = getResult;
     }
 
@@ -39,42 +34,31 @@ public class PostAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected final String doInBackground(String... params) {
-        URL myUrl = null;
-        HttpURLConnection conn = null;
+        HttpURLConnection conn;
         StringBuilder response = new StringBuilder();
-        String url  = params[0];
+        String getData  = params[0];
         try {
-            myUrl = new URL(url);
-            conn = (HttpURLConnection) myUrl.openConnection();
+            URL obj = new URL(getData);
+
+            conn = (HttpURLConnection) obj.openConnection();
             conn.setReadTimeout(ServerRequest.READ_TIME_OUT);
             conn.setConnectTimeout(ServerRequest.CONNECTION_TIME_OUT);
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-            //one long string, first encode is the key to get the  data on your web
-            //page, second encode is the value, keep concatenating key and value.
-            //theres another ways which easier then this long string in case you are
-            //posting a lot of info, look it up.
-            String postData = params[1];
-            OutputStream os = conn.getOutputStream();
-
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            bufferedWriter.write(postData);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-
-            InputStream inputStream = conn.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-            String line = "";
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 response.append(line);
             }
             bufferedReader.close();
-            inputStream.close();
             conn.disconnect();
-            os.close();
-        }  catch (IOException e) {
+
+            return response.toString();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
