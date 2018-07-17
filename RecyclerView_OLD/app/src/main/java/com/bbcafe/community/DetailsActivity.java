@@ -44,6 +44,7 @@ public class DetailsActivity extends AppCompatActivity {
             Picasso.with(context).load(jsonObject.getString("photo")).into(image);
             shopname = findViewById(R.id.shopname);
             shopname.setText(jsonObject.getString("shopname"));
+            setTitle(jsonObject.getString("shopname"));
             ownername = findViewById(R.id.ownername);
             ownername.setText(jsonObject.getString("name"));
             phone = findViewById(R.id.phone);

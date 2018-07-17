@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity
             //Intent intent = new Intent(MainActivity.this, HtmlContent.class);
             //startActivity(intent);
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
-            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("ABOUT_DATA"));
+            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("ABOUT_DATA")).putExtra("TITLE", "எங்களை பற்றி");
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             setResult(RESULT_OK);
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity
             shareIt();
         } else if (id == R.id.nav_send) {
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
-            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("CONTACT_DATA"));
+            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("CONTACT_DATA")).putExtra("TITLE", "தொடர்புக்கு");
             startActivity(intent);
         }
 

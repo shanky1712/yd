@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".NewsDetails"
+    tools:showIn="@layout/activity_news_details">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/newstitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:drawableLeft="@drawable/ic_content_paste_black_24dp"
+            android:text="TextView" />
+        <TextView
+            android:id="@+id/newsborder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/border_top_bottom" />
+        <ImageView
+            android:id="@+id/newsimage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/newsdata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:text="TextView" />
+        <TextView
+            android:id="@+id/newsborder1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/border_top_bottom" />
+        <TextView
+            android:id="@+id/sharelbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="இந்த விபரங்களை பகிர:"
+            android:paddingLeft="18dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="18sp"/>
+        <Button
+            android:id="@+id/share"
+            android:layout_marginLeft="10dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_menu_share"/>
+    </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
