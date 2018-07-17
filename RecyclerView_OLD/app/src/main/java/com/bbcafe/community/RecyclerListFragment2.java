@@ -60,7 +60,7 @@ public class RecyclerListFragment2 extends Fragment {
         if (ServerRequest.isConnectedToInternet(getContext())) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager());
-            ServerRequest.get("http://192.168.43.182/commune/utilities/view_all_contracts", new ServerRequest.GetResult() {
+            ServerRequest.get("http://commune.bestbloggercafe.com/utilities/view_all_contracts", new ServerRequest.GetResult() {
                 @Override
                 public void onResult(String resultStringFromServer) {
                     progressDialog.cancel();

@@ -101,11 +101,14 @@ public class MainActivity extends AppCompatActivity
             tvUserEmail.setText(account.getEmail());
         }
     }
-
-    public static void start(Activity context, GoogleSignInAccount account) {
+    public static void start(Activity context, GoogleSignInAccount account, String aboutData, String contactData) {
+        context.startActivityForResult(new Intent(context, MainActivity.class)
+                .putExtra(USER_ACCOUNT, account).putExtra("ABOUT_DATA", aboutData).putExtra("CONTACT_DATA", contactData), LoginActivity.LOG_OUT);
+    }
+    /*public static void start(Activity context, GoogleSignInAccount account, String htmlData) {
         context.startActivityForResult(new Intent(context, MainActivity.class)
         .putExtra(USER_ACCOUNT, account), LoginActivity.LOG_OUT);
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -143,9 +146,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -161,17 +164,25 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_list2) {
             createRecyclerListFragment2();
         } else if (id == R.id.nav_about_us) {
-            showAboutUs("http://commune.bestbloggercafe.com/utilities/view_all_resources");
+            //showAboutUs("http://www.courtalam.com/");
+            //Intent intent = new Intent(MainActivity.this, HtmlContent.class);
+            //startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, HtmlContent.class);
+            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("ABOUT_DATA"));
+            startActivity(intent);
         } else if (id == R.id.nav_logout) {
             setResult(RESULT_OK);
             finish();
         } else if (id == R.id.nav_manage) {
-            createTextFragment("nav_manage");
+            //createTextFragment("nav_manage");
+            showAboutUs("http://www.courtalam.com/");
         } else if (id == R.id.nav_share) {
             //createTextFragment("nav_share");
             shareIt();
         } else if (id == R.id.nav_send) {
-            createTextFragment("nav_send");
+            Intent intent = new Intent(MainActivity.this, HtmlContent.class);
+            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("CONTACT_DATA"));
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -182,8 +193,8 @@ public class MainActivity extends AppCompatActivity
 //sharing implementation here
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "யாதவ சொந்தங்களே !!");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "யாதவ சமுதாய செய்திகளையும் , ஒவ்வொரு யாதவ சமுதாயத்தை சேர்ந்தவரும் இந்த வலைத்தளத்தினை பயன்படுத்தி கொள்ளவும் visit http://yadhavaa.blogspot.in/");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Hi Friends !!");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Please share this app to everyone");
         startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));
     }
     void createRecyclerListFragment() {

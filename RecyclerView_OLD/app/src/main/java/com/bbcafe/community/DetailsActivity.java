@@ -23,9 +23,10 @@ import java.sql.CallableStatement;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    private TextView shopname,ownername,phone,addr1,addr2,city,pin;
+    private TextView shopname,ownername,phone,addr1,addr2,city,pin,landline;
     private ImageView image;
     private Context context;
+    JSONObject jsonObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
         //Snackbar.make(findViewById(android.R.id.content), jsonArguments, Snackbar.LENGTH_LONG).show();
 
         try {
-            JSONObject jsonObject = new JSONObject(jsonArguments);
-            final String share_name = jsonObject.getString("name");
-            String share_shopname = jsonObject.getString("shopname");
-            String share_mobile = jsonObject.getString("mobile");
-            String share_image = jsonObject.getString("photo");
+            jsonObject = new JSONObject(jsonArguments);
             image = findViewById(R.id.shopimage);
             Picasso.with(context).load(jsonObject.getString("photo")).into(image);
             shopname = findViewById(R.id.shopname);
@@ -51,6 +48,8 @@ public class DetailsActivity extends AppCompatActivity {
             ownername.setText(jsonObject.getString("name"));
             phone = findViewById(R.id.phone);
             phone.setText(jsonObject.getString("mobile"));
+            landline = findViewById(R.id.landLine);
+            landline.setText(jsonObject.getString("landline"));
             addr1 = findViewById(R.id.address);
             addr1.setText(jsonObject.getString("addr1"));
             addr2 = findViewById(R.id.addr2);
@@ -66,21 +65,24 @@ public class DetailsActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                /*Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                /*final String jsonArguments = getIntent().getStringExtra("DETAILS");
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(jsonArguments);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "யாதவ சொந்தங்களே !!");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, share_name);
-                startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));*/
+                try {
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shop Name : "+jsonObject.getString("shopname"));
+                    sharingIntent.putExtra(Intent.EXTRA_TEXT, "*Shop Name :* "+jsonObject.getString("shopname") +" , *Owner :* "+jsonObject.getString("name")+" , *Mobile:*"+jsonObject.getString("mobile")+ " , *Address:* "+jsonObject.getString("addr1")+","+jsonObject.getString("addr2")+ ","+jsonObject.getString("city")+","+jsonObject.getString("pincode"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));
             }
         });
-        /*FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LoadFragmentActivity.start(DetailsActivity.this, "http://commune.bestbloggercafe.com/utilities/contract_creation");
-            }
-        });*/
     }
     public static void start(Context context, String jsonObject) {
         context.startActivity(new Intent(context, DetailsActivity.class)

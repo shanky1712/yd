@@ -36,7 +36,7 @@
             android:label="@string/title_activity_load_fragment" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,6 +46,14 @@
         <activity
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details" />
+        <activity
+            android:name=".NewsDetails"
+            android:label="@string/title_activity_news_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".HtmlContent"
+            android:label="@string/title_activity_html_content"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

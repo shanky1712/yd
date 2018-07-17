@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_lightbulb_outline_black_24dp"
-            android:title="யாதவ செய்திகள்" />
+            android:title="செய்திகள்" />
         <item
             android:id="@+id/nav_list2"
             android:icon="@drawable/ic_contacts_black_24dp"
@@ -18,8 +18,8 @@
             android:title="எங்களை பற்றி" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="அமைப்புகள்" />
+            android:icon="@drawable/ic_music_video_black_24dp"
+            android:title="பாடல்கள்" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_flight_takeoff_black_24dp"

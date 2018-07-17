@@ -60,7 +60,7 @@ public class RecyclerListFragment extends Fragment {
         if (ServerRequest.isConnectedToInternet(getContext())) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager());
-            ServerRequest.get("http://192.168.43.182/commune/utilities/view_all_resources", new ServerRequest.GetResult() {
+            ServerRequest.get("http://commune.bestbloggercafe.com/utilities/view_all_resources", new ServerRequest.GetResult() {
                 @Override
                 public void onResult(String resultStringFromServer) {
                     progressDialog.cancel();
@@ -145,11 +145,12 @@ public class RecyclerListFragment extends Fragment {
                 holder.itemContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
-                            LoadFragmentActivity.start(getActivity(), jsonObject.getString("url"));
-                        } catch (JSONException e) {
+                        //try {
+                            //LoadFragmentActivity.start(getActivity(), jsonObject.getString("url"));
+                            NewsDetails.start(getActivity(), jsonObject.toString());
+                        /*} catch (JSONException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                     }
                 });
             } catch (JSONException e) {

@@ -4,14 +4,14 @@
     android:id="@+id/itemContainer"
     android:layout_marginStart="2dp"
     android:layout_marginEnd="2dp"
-    android:layout_marginTop="1dp"
-    android:layout_marginBottom="1dp">
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
         android:orientation="horizontal" >
 
         <android.support.v7.widget.AppCompatImageView
@@ -31,14 +31,14 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:textSize="24sp"
+                android:padding="5dp"
+                android:textSize="16sp"
                 android:id="@+id/shopName"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:drawableLeft="@drawable/ic_person_outline_black_24dp"
                 android:drawablePadding="10dp"
                 android:id="@+id/name"/>
@@ -46,15 +46,10 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:drawableLeft="@drawable/ic_phone_black_24dp"
                 android:drawablePadding="10dp"
                 android:id="@+id/mobile"/>
-
-            <!--<android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/landLine"/>-->
 
         </LinearLayout>
 

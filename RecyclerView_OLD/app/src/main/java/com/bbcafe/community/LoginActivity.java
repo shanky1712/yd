@@ -171,13 +171,11 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(@Nullable GoogleSignInAccount account) {
         if (account != null) {
             mStatusTextView.setText("Signed in as: "+ account.getDisplayName());
-
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
             sendToServer(account);
         } else {
             mStatusTextView.setText("Signed out");
-
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
@@ -187,30 +185,32 @@ public class LoginActivity extends AppCompatActivity {
         if (ServerRequest.isConnectedToInternet(context)) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(getSupportFragmentManager());
-            ServerRequest.get("http://192.168.43.182/commune/utilities/assign_work", new ServerRequest.GetResult() {
-                @Override
-                public void onResult(String resultStringFromServer) {
-                    progressDialog.cancel();
-                    try {
-                        if (!resultStringFromServer.isEmpty()) {
-                            JSONObject jsonObject = new JSONObject(resultStringFromServer);//get your result json object here
-                            Log.i(TAG,resultStringFromServer);
-                            if (jsonObject.getInt("status")==1) {
-                                MainActivity.start(LoginActivity.this, account);
-                            } else {
-                                signOut();
-                                Toast.makeText(context, "Invalid User Data", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(context, "Connection Error", Toast.LENGTH_SHORT).show();
-                        }
+            ServerRequest.get("http://commune.bestbloggercafe.com/utilities/assign_work", new ServerRequest.GetResult() {
+                        @Override
+                        public void onResult(String resultStringFromServer) {
+                            progressDialog.cancel();
+                            try {
+                                if (!resultStringFromServer.isEmpty()) {
+                                    JSONObject jsonObject = new JSONObject(resultStringFromServer);//get your result json object here
+                                    Log.i(TAG,resultStringFromServer);
+                                    if (jsonObject.getInt("status")==1) {
+                                        String aboutData = jsonObject.getString("about");
+                                        String contactData = jsonObject.getString("contact");
+                                        MainActivity.start(LoginActivity.this, account, aboutData, contactData);
+                                    } else {
+                                        signOut();
+                                        Toast.makeText(context, "Invalid User Data", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(context, "Connection Error", Toast.LENGTH_SHORT).show();
+                                }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }, new Pair<>("name", account.getDisplayName()),
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Pair<>("name", account.getDisplayName()),
                     new Pair<>("photo", ""+account.getPhotoUrl()),
                     new Pair<>("email", account.getEmail()),
                     new Pair<>("mobile", "NOT_AVAILABLE"),
