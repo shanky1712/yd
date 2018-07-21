@@ -54,7 +54,13 @@ public class RecyclerListFragment2 extends Fragment {
 
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        // Tracking the screen view
+        MyApplication.getInstance().trackScreenView("Contact List View");
+    }
     @SuppressWarnings("unchecked")
     private void sendServerRequest() {
         if (ServerRequest.isConnectedToInternet(getContext())) {
@@ -78,6 +84,7 @@ public class RecyclerListFragment2 extends Fragment {
                             Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
+                        MyApplication.getInstance().trackException(e);
                         e.printStackTrace();
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -150,6 +157,7 @@ public class RecyclerListFragment2 extends Fragment {
                     }
                 });
             } catch (JSONException e) {
+                MyApplication.getInstance().trackException(e);
                 e.printStackTrace();
             }
         }

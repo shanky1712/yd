@@ -160,26 +160,31 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            createRecyclerListFragment();
+            createRecyclerListFragment();//News List
+            MyApplication.getInstance().trackEvent("Menu", "Click", "News List");
         } else if (id == R.id.nav_list2) {
-            createRecyclerListFragment2();
+            createRecyclerListFragment2();//Contact List
+            MyApplication.getInstance().trackEvent("Menu", "Click", "Contact List");
         } else if (id == R.id.nav_about_us) {
             //showAboutUs("http://www.courtalam.com/");
-            //Intent intent = new Intent(MainActivity.this, HtmlContent.class);
-            //startActivity(intent);
+            MyApplication.getInstance().trackEvent("Menu", "Click", "About us");
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
             intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("ABOUT_DATA")).putExtra("TITLE", "எங்களை பற்றி");
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
+            MyApplication.getInstance().trackEvent("Menu", "Click", "Logout");
             setResult(RESULT_OK);
             finish();
         } else if (id == R.id.nav_manage) {
             //createTextFragment("nav_manage");
+            MyApplication.getInstance().trackEvent("Menu", "Click", "Songs");
             showAboutUs("http://www.courtalam.com/");
         } else if (id == R.id.nav_share) {
             //createTextFragment("nav_share");
+            MyApplication.getInstance().trackEvent("Menu", "Click", "App Share");
             shareIt();
         } else if (id == R.id.nav_send) {
+            MyApplication.getInstance().trackEvent("Menu", "Click", "To Contact");
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
             intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("CONTACT_DATA")).putExtra("TITLE", "தொடர்புக்கு");
             startActivity(intent);

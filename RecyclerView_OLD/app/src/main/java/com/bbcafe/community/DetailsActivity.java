@@ -60,6 +60,7 @@ public class DetailsActivity extends AppCompatActivity {
             pin = findViewById(R.id.pin);
             pin.setText(jsonObject.getString("pincode"));
         } catch (JSONException e) {
+            MyApplication.getInstance().trackException(e);
             e.printStackTrace();
         }
         Button share = findViewById(R.id.share);
@@ -73,12 +74,14 @@ public class DetailsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }*/
+                MyApplication.getInstance().trackEvent("Contact", "Share", "Business Contacts shared");
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 try {
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shop Name : "+jsonObject.getString("shopname"));
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, "*Shop Name :* "+jsonObject.getString("shopname") +" , *Owner :* "+jsonObject.getString("name")+" , *Mobile:*"+jsonObject.getString("mobile")+ " , *Address:* "+jsonObject.getString("addr1")+","+jsonObject.getString("addr2")+ ","+jsonObject.getString("city")+","+jsonObject.getString("pincode"));
                 } catch (JSONException e) {
+                    MyApplication.getInstance().trackException(e);
                     e.printStackTrace();
                 }
                 startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));

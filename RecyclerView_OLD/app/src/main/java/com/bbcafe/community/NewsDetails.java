@@ -48,6 +48,7 @@ public class NewsDetails extends AppCompatActivity {
             //newsdata.setText(jsonObject.getString("title"));
             newsdata.setText(Html.fromHtml(strData, Html.FROM_HTML_MODE_COMPACT));
         } catch (JSONException e) {
+            MyApplication.getInstance().trackException(e);
             e.printStackTrace();
         }
 
@@ -61,6 +62,7 @@ public class NewsDetails extends AppCompatActivity {
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Title : "+jsonObject.getString("title"));
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, "*Content :* "+jsonObject.getString("title") +" , *URL :* "+jsonObject.getString("url"));
                 } catch (JSONException e) {
+                    MyApplication.getInstance().trackException(e);
                     e.printStackTrace();
                 }
                 startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));
