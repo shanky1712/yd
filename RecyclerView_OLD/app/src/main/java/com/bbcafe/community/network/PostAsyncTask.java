@@ -26,9 +26,9 @@ import java.net.URLEncoder;
 public class PostAsyncTask extends AsyncTask<String, Void, String> {
     private static final String TAG = PostAsyncTask.class.getSimpleName();
 
-    ServerRequest.GetResult getResult;
+    GetResult getResult;
 
-    PostAsyncTask(ServerRequest.GetResult getResult) {
+    PostAsyncTask(GetResult getResult) {
         this.getResult = getResult;
     }
 

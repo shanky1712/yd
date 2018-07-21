@@ -19,10 +19,6 @@ public class ServerRequest {
     static final int CONNECTION_TIME_OUT = 15000;
     static final int READ_TIME_OUT = 10000;
 
-    public static interface GetResult {
-        void onResult(String resultStringFromServer);
-    }
-
     public static void post(String url, GetResult getResult, Pair<String, String>... params) {
         try {
 

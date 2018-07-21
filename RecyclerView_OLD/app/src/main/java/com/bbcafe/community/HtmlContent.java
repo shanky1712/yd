@@ -44,7 +44,7 @@ public class HtmlContent extends AppCompatActivity {
 
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(getSupportFragmentManager());
-            ServerRequest.get("http://192.168.1.103/commune/utilities/contactAboutus", new ServerRequest.GetResult() {
+            ServerRequest.get("http://192.168.1.103/commune/utilities/contactAboutus", new GetResult() {
                         @Override
                         public void onResult(String resultStringFromServer) {
                             progressDialog.cancel();

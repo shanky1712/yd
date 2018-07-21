@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">APP Name !</string>
+    <string name="app_name">APP Name</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,4 +13,5 @@
     <string name="title_activity_details">Contacts</string>
     <string name="title_activity_news_details">NewsDetails</string>
     <string name="title_activity_html_content">HtmlContent</string>
+    <string name="title_activity_songs">SongsActivity</string>
 </resources>

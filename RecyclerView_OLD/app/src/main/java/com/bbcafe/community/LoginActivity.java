@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bbcafe.community.network.GetResult;
 import com.bbcafe.community.network.ServerRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -186,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         if (ServerRequest.isConnectedToInternet(context)) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(getSupportFragmentManager());
-            ServerRequest.get("http://commune.bestbloggercafe.com/utilities/assign_work", new ServerRequest.GetResult() {
+            ServerRequest.get("http://commune.bestbloggercafe.com/utilities/assign_work", new GetResult() {
                         @Override
                         public void onResult(String resultStringFromServer) {
                             progressDialog.cancel();
@@ -197,7 +199,13 @@ public class LoginActivity extends AppCompatActivity {
                                     if (jsonObject.getInt("status")==1) {
                                         String aboutData = jsonObject.getString("about");
                                         String contactData = jsonObject.getString("contact");
-                                        MainActivity.start(LoginActivity.this, account, aboutData, contactData);
+                                        JSONArray jsonArray = jsonObject.getJSONArray("songs");
+                                        /*for (int i = 0; i<jsonArray.length(); i++) {
+                                            JSONObject songsJsonObject = jsonArray.getJSONObject(i);
+                                            String url = songsJsonObject.getString("url");
+                                            String title = songsJsonObject.getString("title");
+                                        }*/
+                                        MainActivity.start(LoginActivity.this, account, aboutData, contactData, jsonArray.toString());
                                     } else {
                                         signOut();
                                         Toast.makeText(context, "Invalid User Data", Toast.LENGTH_SHORT).show();

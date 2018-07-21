@@ -101,9 +101,9 @@ public class MainActivity extends AppCompatActivity
             tvUserEmail.setText(account.getEmail());
         }
     }
-    public static void start(Activity context, GoogleSignInAccount account, String aboutData, String contactData) {
+    public static void start(Activity context, GoogleSignInAccount account, String aboutData, String contactData, String songsData) {
         context.startActivityForResult(new Intent(context, MainActivity.class)
-                .putExtra(USER_ACCOUNT, account).putExtra("ABOUT_DATA", aboutData).putExtra("CONTACT_DATA", contactData), LoginActivity.LOG_OUT);
+                .putExtra(USER_ACCOUNT, account).putExtra("ABOUT_DATA", aboutData).putExtra("CONTACT_DATA", contactData).putExtra("SONGS_DATA", songsData), LoginActivity.LOG_OUT);
     }
     /*public static void start(Activity context, GoogleSignInAccount account, String htmlData) {
         context.startActivityForResult(new Intent(context, MainActivity.class)
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             //createTextFragment("nav_manage");
             MyApplication.getInstance().trackEvent("Menu", "Click", "Songs");
-            showAboutUs("http://www.courtalam.com/");
+            createSongsListFragment();
         } else if (id == R.id.nav_share) {
             //createTextFragment("nav_share");
             MyApplication.getInstance().trackEvent("Menu", "Click", "App Share");
@@ -213,6 +213,13 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragmentContainer, RecyclerListFragment2.newInstance(), RecyclerListFragment2.TAG);
+        transaction.commit();
+    }
+
+    void createSongsListFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, SongsListFragment.newInstance(getIntent().getStringExtra("SONGS_DATA")), SongsListFragment.TAG);
         transaction.commit();
     }
 

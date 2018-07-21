@@ -21,9 +21,9 @@ import java.net.URLEncoder;
 public class GetAsyncTask extends AsyncTask<String, Void, String> {
     private static final String TAG = GetAsyncTask.class.getSimpleName();
 
-    ServerRequest.GetResult getResult;
+    GetResult getResult;
 
-    GetAsyncTask(ServerRequest.GetResult getResult) {
+    GetAsyncTask(GetResult getResult) {
         this.getResult = getResult;
     }
 
@@ -43,7 +43,7 @@ public class GetAsyncTask extends AsyncTask<String, Void, String> {
             conn = (HttpURLConnection) obj.openConnection();
             conn.setReadTimeout(ServerRequest.READ_TIME_OUT);
             conn.setConnectTimeout(ServerRequest.CONNECTION_TIME_OUT);
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
@@ -61,7 +61,6 @@ public class GetAsyncTask extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return response.toString();
     }
 
