@@ -40,7 +40,7 @@ import java.net.URL;
 
 public class SongsListFragment extends Fragment {
     public static final String TAG = SongsListFragment.class.getSimpleName();
-
+    private static final int PERMISSION_REQUEST_CODE = 200;
     private JSONArray jsonArray;
 
     private RecyclerView recyclerView;
@@ -75,8 +75,6 @@ public class SongsListFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-
 
         return view;
     }
@@ -298,6 +296,7 @@ public class SongsListFragment extends Fragment {
                     holder.fab.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            MyApplication.getInstance().trackEvent("Audio", "Download", "Songs Download");
                             new DownloadTask(getContext(), holder.progressBar, new GetResult() {
                                 @Override
                                 public void onResult(String resultStringFromServer) {

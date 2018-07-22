@@ -2,6 +2,7 @@ package com.bbcafe.community;
 
 import android.app.Application;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -17,7 +18,7 @@ public class MyApplication extends Application{
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-
+        MobileAds.initialize(this, "ca-app-pub-3953183793477529~4518969756");
         AnalyticsTrackers.initialize(this);
         AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
     }
