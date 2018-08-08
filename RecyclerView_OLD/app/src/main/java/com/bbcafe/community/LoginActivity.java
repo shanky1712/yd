@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
         if (ServerRequest.isConnectedToInternet(context)) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(getSupportFragmentManager());
-            ServerRequest.get("http://commune.bestbloggercafe.com/utilities/assign_work", new GetResult() {
+            ServerRequest.get("http://community.courtalam.com/utilities/assign_work", new GetResult() {
                         @Override
                         public void onResult(String resultStringFromServer) {
                             progressDialog.cancel();
@@ -232,6 +232,11 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.i(TAG,resultStringFromServer);
                                     if (jsonObject.getInt("status")==1) {
                                         String aboutData = jsonObject.getString("about");
+                                        String businessStatus = jsonObject.getString("businessStatus");
+                                        String whatsappGroupUrl = jsonObject.getString("whatsappGroupUrl");
+                                        String appShareMsg = jsonObject.getString("appShareMsg");
+                                        String businessUrl = jsonObject.getString("businessUrl");
+                                        String watsappMsg = jsonObject.getString("watsappMsg");
                                         String contactData = jsonObject.getString("contact");
                                         JSONArray jsonArray = jsonObject.getJSONArray("songs");
                                         /*for (int i = 0; i<jsonArray.length(); i++) {
@@ -239,7 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                                             String url = songsJsonObject.getString("url");
                                             String title = songsJsonObject.getString("title");
                                         }*/
-                                        MainActivity.start(LoginActivity.this, account, aboutData, contactData, jsonArray.toString());
+                                        MainActivity.start(LoginActivity.this, account, aboutData, contactData, businessStatus, watsappMsg, whatsappGroupUrl, businessUrl, appShareMsg, jsonArray.toString());
                                     } else {
                                         signOut();
                                         Toast.makeText(context, "Invalid User Data", Toast.LENGTH_SHORT).show();

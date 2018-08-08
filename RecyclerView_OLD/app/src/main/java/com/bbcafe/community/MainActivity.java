@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -44,17 +45,15 @@ public class MainActivity extends AppCompatActivity
     private static final String USER_ACCOUNT = "USER_ACCOUNT";
     private static final int PERMISSION_REQUEST_CODE = 200;
     private Context context;
-
+    public static String PACKAGE_NAME;
     private ImageView ivUserPhoto;
     private TextView tvUserName, tvUserEmail;
-    //private ShareActionProvider mShareActionProvider;
-
-    //private FrameLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PACKAGE_NAME = getApplicationContext().getPackageName();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -102,9 +101,9 @@ public class MainActivity extends AppCompatActivity
             tvUserEmail.setText(account.getEmail());
         }
     }
-    public static void start(Activity context, GoogleSignInAccount account, String aboutData, String contactData, String songsData) {
+    public static void start(Activity context, GoogleSignInAccount account, String aboutData, String contactData, String businessStatus, String watsappMsg, String whatsappGroupUrl, String businessUrl, String appShareMsg, String songsData) {
         context.startActivityForResult(new Intent(context, MainActivity.class)
-                .putExtra(USER_ACCOUNT, account).putExtra("ABOUT_DATA", aboutData).putExtra("CONTACT_DATA", contactData).putExtra("SONGS_DATA", songsData), LoginActivity.LOG_OUT);
+                .putExtra(USER_ACCOUNT, account).putExtra("BusiStatus", businessStatus).putExtra("WatsappLbl", watsappMsg).putExtra("whatsappGroupUrl", whatsappGroupUrl).putExtra("appShareMsg", appShareMsg).putExtra("businessUrl", businessUrl).putExtra("ABOUT_DATA", aboutData).putExtra("CONTACT_DATA", contactData).putExtra("SONGS_DATA", songsData), LoginActivity.LOG_OUT);
     }
     /*public static void start(Activity context, GoogleSignInAccount account, String htmlData) {
         context.startActivityForResult(new Intent(context, MainActivity.class)
@@ -153,55 +152,6 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-    private boolean checkPermission() {
-        int playFile = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
-        int downloadFile = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
-        return playFile == PackageManager.PERMISSION_GRANTED && downloadFile == PackageManager.PERMISSION_GRANTED;
-    }
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-    }
-   /*@Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0) {
-
-                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-
-                    if (locationAccepted && cameraAccepted) {
-                        //Snackbar.make(view, "Permission Granted, Now you can access location data and camera.", Snackbar.LENGTH_LONG).show();
-                        MyApplication.getInstance().trackEvent("Menu", "Click", "Songs");
-                        //createSongsListFragment();
-                        Toast.makeText(context, "Accepted", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-
-                        //Snackbar.make(view, "Permission Denied, You cannot access location data and camera.", Snackbar.LENGTH_LONG).show();
-                       // createRecyclerListFragment();//News List
-                        Toast.makeText(context, "Not Accepted", Toast.LENGTH_SHORT).show();
-                        MyApplication.getInstance().trackEvent("Menu", "Click", "News List");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
-                                showMessageOKCancel("You need to allow access to both the permissions",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                    requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE},
-                                                            PERMISSION_REQUEST_CODE);
-                                                }
-                                            }
-                                        });
-                                return;
-                            }
-                        }
-                    }
-                }
-                break;
-        }
-    }*/
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(MainActivity.this)
                 .setMessage(message)
@@ -226,7 +176,7 @@ public class MainActivity extends AppCompatActivity
             //showAboutUs("http://www.courtalam.com/");
             MyApplication.getInstance().trackEvent("Menu", "Click", "About us");
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
-            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("ABOUT_DATA")).putExtra("TITLE", "எங்களை பற்றி");
+            intent.putExtra("whatsappGroupUrl", getIntent().getStringExtra("whatsappGroupUrl")).putExtra("businessUrl", getIntent().getStringExtra("businessUrl")).putExtra("DISP_DATA", getIntent().getStringExtra("ABOUT_DATA")).putExtra("WHATSAPPLBL", getIntent().getStringExtra("WatsappLbl")).putExtra("TITLE", "எங்களை பற்றி");
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             MyApplication.getInstance().trackEvent("Menu", "Click", "Logout");
@@ -235,20 +185,22 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             //createTextFragment("nav_manage");
             MyApplication.getInstance().trackEvent("Menu", "Click", "Songs");
-            if (!checkPermission()) {
+            createSongsListFragment();
+            /*if (!checkPermission()) {
                 requestPermission();
                 //createSongsListFragment();
             } else {
                 createSongsListFragment();
-            }
+            }*/
         } else if (id == R.id.nav_share) {
             //createTextFragment("nav_share");
             MyApplication.getInstance().trackEvent("Menu", "Click", "App Share");
-            shareIt();
+            String shareMsg = getIntent().getStringExtra("appShareMsg");
+            shareIt(shareMsg);
         } else if (id == R.id.nav_send) {
             MyApplication.getInstance().trackEvent("Menu", "Click", "To Contact");
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
-            intent.putExtra("ABOUT_DATA", getIntent().getStringExtra("CONTACT_DATA")).putExtra("TITLE", "தொடர்புக்கு");
+            intent.putExtra("whatsappGroupUrl", getIntent().getStringExtra("whatsappGroupUrl")).putExtra("businessUrl", getIntent().getStringExtra("businessUrl")).putExtra("DISP_DATA", getIntent().getStringExtra("CONTACT_DATA")).putExtra("WHATSAPPLBL", getIntent().getStringExtra("WatsappLbl")).putExtra("TITLE", "தொடர்புக்கு");
             startActivity(intent);
         }
 
@@ -256,12 +208,13 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    private void shareIt() {
+    private void shareIt(String shareMsg) {
 //sharing implementation here
+
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Hi Friends !!");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Please share this app to everyone");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMsg + " Check out the App at: https://play.google.com/store/apps/details?id=" + PACKAGE_NAME);
         startActivity(Intent.createChooser(sharingIntent, "பகிர்க"));
     }
     void createRecyclerListFragment() {
@@ -277,26 +230,34 @@ public class MainActivity extends AppCompatActivity
         transaction.replace(R.id.fragmentContainer, RecyclerListFragment2.newInstance(), RecyclerListFragment2.TAG);
         transaction.commit();
     }
-
     void createSongsListFragment() {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragmentContainer, SongsListFragment.newInstance(getIntent().getStringExtra("SONGS_DATA")), SongsListFragment.TAG);
-        transaction.commit();
+        if ((ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        } else {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragmentContainer, SongsListFragment.newInstance(getIntent().getStringExtra("SONGS_DATA")), SongsListFragment.TAG);
+            transaction.commit();
+        }
     }
 
-    void showAboutUs(String textToDisplay) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragmentContainer, WebViewFragment.newInstance(textToDisplay), WebViewFragment.TAG);
-        transaction.commit();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        try {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContainer, SongsListFragment.newInstance(getIntent().getStringExtra("SONGS_DATA")), SongsListFragment.TAG);
+                transaction.commit();
+            } else {
+                Toast.makeText(context, "Please allow storage access permission to continue", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
-
-    void createTextFragment(String textToDisplay) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragmentContainer, TextFragment.newInstance(textToDisplay), TextFragment.TAG);
-        transaction.commit();
-    }
-
 }

@@ -1,6 +1,8 @@
 package com.bbcafe.community;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +13,7 @@ import android.text.Html;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,12 +36,36 @@ public class HtmlContent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_html_content);
+        String htmlAboutContent = getIntent().getStringExtra("DISP_DATA");
+        String watsapLbl = getIntent().getStringExtra("WHATSAPPLBL");
+        final String whatsappGroupUrl = getIntent().getStringExtra("whatsappGroupUrl");
+        final String businessUrl = getIntent().getStringExtra("businessUrl");
+
+        TextView watsAppMsg = (TextView)findViewById(R.id.watsappLbl);
+        ImageButton whatsapp = (ImageButton)findViewById(R.id.whatsapp);
+        ImageButton businessUrlBtn = (ImageButton)findViewById(R.id.businessUrl);
+        
+        whatsapp.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent viewIntent =
+                        new Intent("android.intent.action.VIEW",
+                                Uri.parse(whatsappGroupUrl));
+                startActivity(viewIntent);
+            }
+        });
+        businessUrlBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent viewIntent =
+                        new Intent("android.intent.action.VIEW",
+                                Uri.parse(businessUrl));
+                startActivity(viewIntent);
+            }
+        });
         context = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
-        //final String jsonArguments = getIntent().getStringExtra("first_name");
-        //sendToServer();
-        String htmlAboutContent = getIntent().getStringExtra("ABOUT_DATA");
+        watsAppMsg.setText(Html.fromHtml(watsapLbl, Html.FROM_HTML_MODE_COMPACT));
         setTitle(getIntent().getStringExtra("TITLE"));
         shopname = findViewById(R.id.content);
         shopname.setText(Html.fromHtml(htmlAboutContent, Html.FROM_HTML_MODE_COMPACT));

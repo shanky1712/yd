@@ -252,11 +252,12 @@ public class SongsListFragment extends Fragment {
             try {
                 final JSONObject jsonObject = jsonArray.getJSONObject(holder.getAdapterPosition());
                 final String title = jsonObject.getString("title");
+                final String songName = jsonObject.getString("fileName");
                 final String url = jsonObject.getString("url");
 
                 holder.textView.setText(title);
 
-                final String filePath = Environment.getExternalStorageDirectory()+"/"+getString(R.string.app_name)+"/"+title+".mp3";
+                final String filePath = Environment.getExternalStorageDirectory()+"/"+getString(R.string.app_name)+"/"+songName+".mp3";
                 File file = new File(filePath);
                 if (file.exists()) {
                     holder.progressBar.setVisibility(View.GONE);
@@ -302,7 +303,7 @@ public class SongsListFragment extends Fragment {
                                 public void onResult(String resultStringFromServer) {
                                     notifyDataSetChanged();
                                 }
-                            }).execute(url, title);
+                            }).execute(url, songName);
                         }
                     });
                 }
