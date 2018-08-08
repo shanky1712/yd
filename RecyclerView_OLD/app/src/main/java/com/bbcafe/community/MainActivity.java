@@ -172,7 +172,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_list2) {
             createRecyclerListFragment2();//Contact List
             MyApplication.getInstance().trackEvent("Menu", "Click", "Contact List");
-        } else if (id == R.id.nav_about_us) {
+        }else if (id == R.id.nav_jobs) {
+            createRecyclerListFragment();//Contact List
+            MyApplication.getInstance().trackEvent("Menu", "Click", "Job List");
+        }else if (id == R.id.nav_about_us) {
             //showAboutUs("http://www.courtalam.com/");
             MyApplication.getInstance().trackEvent("Menu", "Click", "About us");
             Intent intent = new Intent(MainActivity.this, HtmlContent.class);
@@ -186,12 +189,6 @@ public class MainActivity extends AppCompatActivity
             //createTextFragment("nav_manage");
             MyApplication.getInstance().trackEvent("Menu", "Click", "Songs");
             createSongsListFragment();
-            /*if (!checkPermission()) {
-                requestPermission();
-                //createSongsListFragment();
-            } else {
-                createSongsListFragment();
-            }*/
         } else if (id == R.id.nav_share) {
             //createTextFragment("nav_share");
             MyApplication.getInstance().trackEvent("Menu", "Click", "App Share");
@@ -223,7 +220,12 @@ public class MainActivity extends AppCompatActivity
         transaction.replace(R.id.fragmentContainer, RecyclerListFragment.newInstance(), RecyclerListFragment.TAG);
         transaction.commit();
     }
-
+    void createRecyclerJobFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, RecyclerListFragment.newInstance(), RecyclerListFragment.TAG);
+        transaction.commit();
+    }
     void createRecyclerListFragment2() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

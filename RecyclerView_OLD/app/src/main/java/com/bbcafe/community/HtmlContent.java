@@ -42,9 +42,9 @@ public class HtmlContent extends AppCompatActivity {
         final String businessUrl = getIntent().getStringExtra("businessUrl");
 
         TextView watsAppMsg = (TextView)findViewById(R.id.watsappLbl);
-        ImageButton whatsapp = (ImageButton)findViewById(R.id.whatsapp);
-        ImageButton businessUrlBtn = (ImageButton)findViewById(R.id.businessUrl);
-        
+        TextView whatsapp = (TextView)findViewById(R.id.whatsapp);
+        TextView businessUrlBtn = (TextView)findViewById(R.id.businessUrl);
+
         whatsapp.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent viewIntent =

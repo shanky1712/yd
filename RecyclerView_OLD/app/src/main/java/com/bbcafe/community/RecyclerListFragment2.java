@@ -67,7 +67,7 @@ public class RecyclerListFragment2 extends Fragment {
         if (ServerRequest.isConnectedToInternet(getContext())) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager());
-            ServerRequest.get("http://community.courtalam.com/utilities/view_all_contracts", new GetResult() {
+            ServerRequest.get(MyApplication.getInstance().getSHOPURL(), new GetResult() {
                 @Override
                 public void onResult(String resultStringFromServer) {
                     progressDialog.cancel();

@@ -86,7 +86,7 @@ public class SongsListFragment extends Fragment {
     }
 
     private void createDirectory() {
-        File directory = new File(Environment.getExternalStorageDirectory(), getString(R.string.app_name));
+        File directory = new File(Environment.getExternalStorageDirectory(), getString(R.string.title_activity_login));
 
         if(!directory.exists()) {
             boolean isCreated = directory.mkdirs();

@@ -13,7 +13,26 @@ public class MyApplication extends Application{
             .getSimpleName();
 
     private static MyApplication mInstance;
-
+    private String BASEURL = "http://community.courtalam.com/";
+    private String NEWSURL = BASEURL+"utilities/view_all_resources";
+    private String JOBURL = BASEURL+"utilities/view_all_resources?filters=job";
+    private String LOGINURL = BASEURL+"utilities/assign_work";
+    private String SHOPURL = BASEURL+"utilities/view_all_contracts";
+    public String getBASEURL() {
+        return BASEURL;
+    }
+    public String getLOGINURL() {
+        return LOGINURL;
+    }
+    public String getNEWSURL() {
+        return NEWSURL;
+    }
+    public String getSHOPURL() {
+        return SHOPURL;
+    }
+    public String getJOBURL() {
+        return JOBURL;
+    }
     @Override
     public void onCreate() {
         super.onCreate();

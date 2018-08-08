@@ -13,13 +13,17 @@
             android:icon="@drawable/ic_contacts_black_24dp"
             android:title="தொடர்புகள்" />
         <item
-            android:id="@+id/nav_about_us"
-            android:icon="@drawable/ic_group_black_24dp"
-            android:title="எங்களை பற்றி" />
+            android:id="@+id/nav_jobs"
+            android:icon="@drawable/ic_business_center_black_24dp"
+            android:title="வேலைவாய்ப்புகள்" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_music_video_black_24dp"
             android:title="பாடல்கள்" />
+        <item
+            android:id="@+id/nav_about_us"
+            android:icon="@drawable/ic_group_black_24dp"
+            android:title="எங்களை பற்றி" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_flight_takeoff_black_24dp"
@@ -38,5 +42,4 @@
                 android:title="தொடர்பு கொள்க" />
         </menu>
     </item>
-
 </menu>

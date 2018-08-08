@@ -44,7 +44,25 @@
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
-            <ImageButton
+            <TextView
+                android:id="@+id/whatsapp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="வாட்ஸாப் குழுவில் இணைய கிளிக் செய்க"
+                android:drawableStart="@drawable/whatsapp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/businessUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_create_black_24dp"
+                android:padding="10dp"
+                android:text="வியாபார தகவலுக்கு கிளிக் செய்க"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+           <!-- <ImageButton
                 android:id="@+id/whatsapp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -59,7 +77,7 @@
                 android:background="@drawable/ic_create_black_24dp"
                 android:focusable="true"
                 android:layout_margin="10dp"
-                android:text="Button" />
+                android:text="Button" />-->
             <TextView
                 android:id="@+id/newsborder3"
                 android:layout_width="match_parent"

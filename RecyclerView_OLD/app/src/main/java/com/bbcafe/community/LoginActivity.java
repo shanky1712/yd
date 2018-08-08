@@ -2,9 +2,12 @@ package com.bbcafe.community;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
@@ -39,18 +42,25 @@ public class LoginActivity extends AppCompatActivity {
     private AdView mAdView;
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
-
+    private GpsTracker gpsTracker;
     private Context context;
+    public double lat = 0.0, lng = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        //Log.d("Baseurl",MyApplication.getInstance().getBASEURL());
+        try {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         context = this;
         // Views
         mStatusTextView = findViewById(R.id.status);
-
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,23 +107,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
             }
-
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
             }
-
             @Override
             public void onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
                 // covers the screen.
             }
-
             @Override
             public void onAdLeftApplication() {
                 // Code to be executed when the user has left the app.
             }
-
             @Override
             public void onAdClosed() {
                 // Code to be executed when when the user is about to return
@@ -122,7 +128,12 @@ public class LoginActivity extends AppCompatActivity {
         });
         mAdView.loadAd(adRequest);
     }
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here...
+        getLocPerm();
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -134,7 +145,19 @@ public class LoginActivity extends AppCompatActivity {
         updateUI(account);
         // [END on_start_sign_in]
     }
-
+    //@Override
+    public void getLocPerm(){
+        //super.onResume();
+        // put your code here...
+        gpsTracker = new GpsTracker(this);
+        if(gpsTracker.canGetLocation()){
+            lat = gpsTracker.getLatitude();
+            lng = gpsTracker.getLongitude();
+            //Log.d("LatLong", String.valueOf(lat)+'-'+String.valueOf(lng));
+        }else{
+            gpsTracker.showSettingsAlert();
+        }
+    }
     // [START onActivityResult]
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -206,6 +229,7 @@ public class LoginActivity extends AppCompatActivity {
     // [END revokeAccess]
 
     private void updateUI(@Nullable GoogleSignInAccount account) {
+        Log.d("LatLong", String.valueOf(lat)+'-'+String.valueOf(lng));
         if (account != null) {
             mStatusTextView.setText("Signed in as: "+ account.getDisplayName());
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
@@ -222,14 +246,13 @@ public class LoginActivity extends AppCompatActivity {
         if (ServerRequest.isConnectedToInternet(context)) {
             final ProgressDialog progressDialog = new ProgressDialog();
             progressDialog.show(getSupportFragmentManager());
-            ServerRequest.get("http://community.courtalam.com/utilities/assign_work", new GetResult() {
+            ServerRequest.get(MyApplication.getInstance().getLOGINURL(), new GetResult() {
                         @Override
                         public void onResult(String resultStringFromServer) {
                             progressDialog.cancel();
                             try {
                                 if (!resultStringFromServer.isEmpty()) {
                                     JSONObject jsonObject = new JSONObject(resultStringFromServer);//get your result json object here
-                                    Log.i(TAG,resultStringFromServer);
                                     if (jsonObject.getInt("status")==1) {
                                         String aboutData = jsonObject.getString("about");
                                         String businessStatus = jsonObject.getString("businessStatus");
@@ -276,7 +299,10 @@ public class LoginActivity extends AppCompatActivity {
                     new Pair<>("addr2", "PARAM_VALUE"),
                     new Pair<>("city", "PARAM_VALUE"),
                     new Pair<>("state", "PARAM_VALUE"),
+                    new Pair<>("lat", String.valueOf(lat)),
+                    new Pair<>("lng", String.valueOf(lng)),
                     new Pair<>("pincode", "PARAM_VALUE"));
+            Log.d("Pairs","name="+account.getDisplayName()+"&photo="+account.getPhotoUrl()+"&appver="+BuildConfig.VERSION_NAME+"&devicetoken="+FirebaseInstanceId.getInstance().getToken()+"&googleid="+account.getId());
         } else {
             signOut();
         }
